@@ -10,8 +10,5 @@ public class Main extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        Intent intent = new Intent(this, InterestPage.class);
-        startActivity(intent);
     }
 }
