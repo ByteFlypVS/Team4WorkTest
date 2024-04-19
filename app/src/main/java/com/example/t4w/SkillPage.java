@@ -21,8 +21,8 @@ public class SkillPage extends AppCompatActivity{
 
         gateway = new Gateway(this);
         database = gateway.getWritableDatabase();
-
         skills = new Skills(this, gateway, database);
+
         list = findViewById(R.id.sPage);
 
         list.setLayoutManager(new LinearLayoutManager(this));

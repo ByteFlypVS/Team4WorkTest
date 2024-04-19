@@ -27,7 +27,7 @@
             android:ellipsize="end"
             android:maxLines="2"
 
-            android:text="Skill"
+            android:text="Job"
             android:textSize="18dp"/>
 
         <TextView

@@ -21,7 +21,8 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp"
+            android:src="@drawable/upicbackground"/>
 
         <TextView
             android:id="@+id/hName"
@@ -58,7 +59,8 @@
                     android:id="@+id/hSkillPic"
 
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:src="@drawable/skills"/>
 
                 <TextView
                     android:id="@+id/hSkillName"
@@ -71,12 +73,15 @@
                     android:text="Skills"
                     android:textSize="22dp"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/hSkillTTS"
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="0dp"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tts"/>
             </LinearLayout>
 
             <LinearLayout
@@ -96,7 +101,8 @@
                     android:id="@+id/hIntPic"
 
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:src="@drawable/interests"/>
 
                 <TextView
                     android:id="@+id/hIntName"
@@ -109,12 +115,15 @@
                     android:text="Interests"
                     android:textSize="22dp"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/hIntTTS"
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="0dp"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tts"/>
             </LinearLayout>
 
             <LinearLayout
@@ -134,7 +143,8 @@
                     android:id="@+id/hExpPic"
 
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:src="@drawable/experience"/>
 
                 <TextView
                     android:id="@+id/hExpName"
@@ -147,12 +157,15 @@
                     android:text="Experience"
                     android:textSize="22dp"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/hExpTTS"
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="0dp"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tts"/>
             </LinearLayout>
 
             <LinearLayout
@@ -171,7 +184,8 @@
                     android:id="@+id/hAboutPic"
 
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:src="@drawable/info"/>
 
                 <TextView
                     android:id="@+id/hAboutName"
@@ -184,12 +198,15 @@
                     android:text="About Me"
                     android:textSize="22dp"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/hAboutNameTTS"
 
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="0dp"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/tts"/>
             </LinearLayout>
         </LinearLayout>
 

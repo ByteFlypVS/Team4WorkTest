@@ -41,7 +41,7 @@ public class JobPost extends AppCompatActivity{
         job.setText(pName);
         employer.setText(pEmployer);
         role.setText(pDesc);
-        salary.setText("€" + pSalary);
+        salary.setText("€" + pSalary + " Per Year");
 
         try{
             InputStream input = this.getAssets().open(pePic);

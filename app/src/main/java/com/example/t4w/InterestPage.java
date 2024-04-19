@@ -21,8 +21,8 @@ public class InterestPage extends AppCompatActivity{
 
         gateway = new Gateway(this);
         database = gateway.getWritableDatabase();
-
         interests = new Interests(this, gateway, database);
+
         list = findViewById(R.id.iPage);
 
         list.setLayoutManager(new LinearLayoutManager(this));

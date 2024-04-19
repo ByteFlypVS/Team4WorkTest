@@ -21,8 +21,8 @@ public class JobPage extends AppCompatActivity{
 
         gateway = new Gateway(this);
         database = gateway.getWritableDatabase();
-
         jobs = new Jobs(this, gateway, database);
+
         list = findViewById(R.id.jPage);
 
         list.setLayoutManager(new LinearLayoutManager(this));
