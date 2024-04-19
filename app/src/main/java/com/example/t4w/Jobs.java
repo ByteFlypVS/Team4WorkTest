@@ -2,6 +2,7 @@ package com.example.t4w;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -59,6 +60,23 @@ public class Jobs extends RecyclerView.Adapter<Jobs.JobItem>{
         catch(IOException e){
             e.printStackTrace();
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                int halt = holder.getAdapterPosition();
+                Job selectedJob = listJob.get(halt);
+                Intent intent = new Intent(context, JobPost.class);
+
+                intent.putExtra("pePic", selectedJob.getePic());
+                intent.putExtra("pName", selectedJob.getName());
+                intent.putExtra("pEmployer", selectedJob.geteName());
+                intent.putExtra("pDesc", selectedJob.getDesc());
+                intent.putExtra("pSalary", selectedJob.getSalary());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
