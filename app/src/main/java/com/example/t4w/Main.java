@@ -19,6 +19,8 @@ import android.widget.Toast;
 import java.util.Locale;
 
 public class Main extends AppCompatActivity{
+
+    int userId; // Variable to store the user ID
     TextToSpeech textToSpeech;
     Gateway gateway;
     SQLiteDatabase database;
@@ -33,6 +35,9 @@ public class Main extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // Retrieve the user ID from the Intent
+        userId = getIntent().getIntExtra("USER_ID", -1); // Default to -1 if not found
 
         uPic = findViewById(R.id.hPic);
         uName = findViewById(R.id.hName);
@@ -54,91 +59,61 @@ public class Main extends AppCompatActivity{
 
         initializeTextToSpeech();
 
-        skills.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intSkill = new Intent(Main.this, SkillPage.class);
-                startActivity(intSkill);
-            }
+        setupListeners();
+    }
+
+    private void setupListeners() {
+        skills.setOnClickListener(v -> {
+            Intent intSkill = new Intent(Main.this, SkillPage.class);
+            startActivity(intSkill);
         });
 
-        interests.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intInterest = new Intent(Main.this, InterestPage.class);
-                startActivity(intInterest);
-            }
+        interests.setOnClickListener(v -> {
+            Intent intInterest = new Intent(Main.this, InterestPage.class);
+            startActivity(intInterest);
         });
 
-        experience.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                String message = "Work In Progress, Nothing To See Here!";
-
-                speakText(message);
-                Toast.makeText(Main.this, message, Toast.LENGTH_SHORT).show();
-            }
+        experience.setOnClickListener(v -> {
+            String message = "Work In Progress, Nothing To See Here!";
+            speakText(message);
+            Toast.makeText(Main.this, message, Toast.LENGTH_SHORT).show();
         });
 
-        about.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                String message = "Work In Progress, Nothing To See Here!";
-
-                speakText(message);
-                Toast.makeText(Main.this, message, Toast.LENGTH_SHORT).show();
-            }
+        about.setOnClickListener(v -> {
+            Intent intPersonalInfo = new Intent(Main.this, PersonalInfo.class);
+            intPersonalInfo.putExtra("USER_ID", userId);  // Pass the user ID to PersonalInfo
+            startActivity(intPersonalInfo);
         });
 
-        search.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String desc = search.getText().toString();
-                speakText(desc);
-
-                Intent intSearch = new Intent(Main.this, JobPage.class);
-                startActivity(intSearch);
-            }
+        search.setOnClickListener(v -> {
+            String desc = search.getText().toString();
+            speakText(desc);
+            Intent intSearch = new Intent(Main.this, JobPage.class);
+            startActivity(intSearch);
         });
 
-        skillTTS.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                TextView text = findViewById(R.id.hSkillName);
-                String desc = text.getText().toString();
-
-                speakText(desc);
-            }
+        skillTTS.setOnClickListener(v -> {
+            TextView text = findViewById(R.id.hSkillName);
+            String desc = text.getText().toString();
+            speakText(desc);
         });
 
-        interestTTS.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                TextView text = findViewById(R.id.hIntName);
-                String desc = text.getText().toString();
-
-                speakText(desc);
-            }
+        interestTTS.setOnClickListener(v -> {
+            TextView text = findViewById(R.id.hIntName);
+            String desc = text.getText().toString();
+            speakText(desc);
         });
 
-        experienceTTS.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                TextView text = findViewById(R.id.hExpName);
-                String desc = text.getText().toString();
-
-                speakText(desc);
-            }
+        experienceTTS.setOnClickListener(v -> {
+            TextView text = findViewById(R.id.hExpName);
+            String desc = text.getText().toString();
+            speakText(desc);
         });
 
-        aboutTTS.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                TextView text = findViewById(R.id.hAboutName);
-                String desc = text.getText().toString();
-
-                speakText(desc);
-            }
+        aboutTTS.setOnClickListener(v -> {
+            TextView text = findViewById(R.id.hAboutName);
+            String desc = text.getText().toString();
+            speakText(desc);
         });
     }
 
@@ -149,7 +124,6 @@ public class Main extends AppCompatActivity{
                 public void onInit(int status){
                     if(status == TextToSpeech.SUCCESS){
                         int result = textToSpeech.setLanguage(Locale.getDefault());
-
                         if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
                             Toast.makeText(Main.this, "Language not supported", Toast.LENGTH_SHORT).show();
                         }
@@ -167,18 +141,29 @@ public class Main extends AppCompatActivity{
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
-    private void getName(){
-        String query = "SELECT name FROM user WHERE id = 2";
-        Cursor cursor = gateway.getData(database, query);
+    private void getName() {
+        if (userId != -1) { // Check if the userId is valid
+            String query = "SELECT name FROM user WHERE id = " + userId;
+            Cursor cursor = gateway.getData(database, query);
 
-        if(cursor != null && cursor.moveToFirst()){
-            do{
-                @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex("name"));
-
-                uName.setText("Hello " + name + "!");
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex("name"); // Safely check the index
+                    if (nameIndex != -1) { // Ensure the column index is valid
+                        String name = cursor.getString(nameIndex);
+                        uName.setText("Hello " + name);
+                    } else {
+                        uName.setText("Name column not found");
+                    }
+                } else {
+                    uName.setText("No data found for user");
+                }
+                cursor.close();
+            } else {
+                uName.setText("Database query failed");
             }
-            while(cursor.moveToNext());
-            cursor.close();
+        } else {
+            uName.setText("Invalid User ID");
         }
     }
 }

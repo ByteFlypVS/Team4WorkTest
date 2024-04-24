@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="53dp"
+        android:layout_height="51dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/backbutton" />
+
+    <TextView
+        android:id="@+id/experience_skills_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Experience"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/my_work_history_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/experience_skills_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="33dp"
+        android:text="My Work History"
+        android:textColor="@color/black"
+        android:textSize="26sp" />
+
+    <View
+        android:id="@+id/red_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="@color/red"
+        android:layout_below="@id/my_work_history_title"
+        android:layout_marginTop="4dp"
+        android:layout_alignStart="@id/my_work_history_title"
+        android:layout_alignEnd="@id/my_work_history_title"/>
+
+    <ScrollView
+        android:id="@+id/scroll_jobs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/red_underline"
+        android:layout_marginTop="24dp">
+
+        <LinearLayout
+            android:id="@+id/job_entries_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Dynamically add job entries here -->
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/add_experience_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Add Experience"
+        android:background="@color/red"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:layout_margin="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/input_fields_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_above="@id/add_experience_button"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/job_title_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Job Title"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/company_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Company Name"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -3,67 +3,54 @@ package com.example.t4w;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.util.Log;
+import java.util.Locale;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private static final String TAG = "LoginActivity";
     private EditText editTextUsername, editTextPassword;
     private Button loginButton;
     private Gateway dbGateway;
+    private TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        Log.d(TAG, "onCreate: Activity is being created.");
 
-        dbGateway = new Gateway(this);  // Initialize the database gateway
+        dbGateway = new Gateway(this);
+        tts = new TextToSpeech(this, this);
 
-        editTextUsername = findViewById(R.id.username_input);  // Assuming you have an EditText with id 'username_input'
-        editTextPassword = findViewById(R.id.password_input);  // Assuming you have an EditText with id 'password_input'
-        loginButton = findViewById(R.id.login_button);  // Assuming you have a Button with id 'login_button'
+        editTextUsername = findViewById(R.id.username_input);
+        editTextPassword = findViewById(R.id.password_input);
+        loginButton = findViewById(R.id.login_button);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authenticateUser();
-            }
+        editTextUsername.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) tts.speak("What is your name", TextToSpeech.QUEUE_FLUSH, null, null);
         });
+
+        editTextPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) tts.speak("Enter your password", TextToSpeech.QUEUE_FLUSH, null, null);
+        });
+
+        loginButton.setOnClickListener(v -> authenticateUser());
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: Activity is starting.");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: Activity has resumed and is interacting with the user.");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: Activity is pausing and may be partially or fully obscured.");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: Activity is stopping and is no longer visible to the user.");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: Activity is about to be destroyed.");
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            int result = tts.setLanguage(Locale.US);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(this, "Language not supported", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "TTS initialization failed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void authenticateUser() {
@@ -76,12 +63,28 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (dbGateway.checkUserCredentials(username, password)) {
-            Log.d(TAG, "Login successful");
-            Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
-            startActivity(intent);
-            finish();  // Close the login activity
+            int userID = dbGateway.getUserID(username);
+            if (userID != -1) {
+                Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
+                intent.putExtra("USER_ID", userID);  // Pass user ID to WelcomeActivity
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "User ID not found", Toast.LENGTH_LONG).show();
+            }
         } else {
-            Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show();
+            tts.speak("Wrong username or password, please try again", TextToSpeech.QUEUE_FLUSH, null, null);
         }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

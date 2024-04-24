@@ -17,30 +17,35 @@ public class Gateway extends SQLiteAssetHelper {
         super(context, name, null, version);
     }
 
-    // Method to get data using a provided database object and a SQL query
-    public Cursor getData(SQLiteDatabase database, String query) {
+    public Cursor getData(SQLiteDatabase database, String query){
         Cursor cursor = null;
-        try {
+
+        try{
             cursor = database.rawQuery(query, null);
-        } catch (SQLiteException e) {
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
+
         return cursor;
     }
 
-    // Original method without passing SQLiteDatabase
-    public Cursor getData(String query) {
-        SQLiteDatabase database = getReadableDatabase();
+    public int getUserID(String username) {
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
         try {
-            cursor = database.rawQuery(query, null);
-        } catch (SQLiteException e) {
-            e.printStackTrace();
+            cursor = db.query("user", new String[]{"id"}, "name = ?", new String[]{username}, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            }
+            return -1; // Return -1 if user is not found
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-        return cursor;
     }
 
-    // Method to insert a new user into the database
     public boolean insertUser(String name, String phone, String gender, String password) {
         SQLiteDatabase database = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -53,12 +58,11 @@ public class Gateway extends SQLiteAssetHelper {
         try {
             result = database.insertOrThrow("user", null, contentValues);
         } catch (Exception e) {
-            Log.e("DB Error", "Error inserting user", e);
+            Log.e("Gateway", "Error inserting user", e);
         }
-        return result != -1; // returns true if insertion is successful
+        return result != -1;
     }
 
-    // Method to update user details
     public boolean updateUser(String id, String name, String phone, String gender, String password) {
         SQLiteDatabase database = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -67,30 +71,56 @@ public class Gateway extends SQLiteAssetHelper {
         contentValues.put("gender", gender);
         contentValues.put("password", password);
 
-        int result = database.update("user", contentValues, "id = ?", new String[] { id });
-        return result > 0; // returns true if update is successful
+        int result = database.update("user", contentValues, "id = ?", new String[]{id});
+        return result > 0;
     }
 
-    // Method to check if the username and password are correct
     public boolean checkUserCredentials(String username, String password) {
         SQLiteDatabase database = getReadableDatabase();
-        String query = "SELECT * FROM user WHERE name = ? AND password = ?";
-        Cursor cursor = database.rawQuery(query, new String[]{username, password});
-
-        boolean loginSuccess = cursor.getCount() > 0;
-        cursor.close();
-        return loginSuccess;
+        Cursor cursor = null;
+        try {
+            cursor = database.rawQuery("SELECT * FROM user WHERE name = ? AND password = ?", new String[]{username, password});
+            boolean loginSuccess = cursor.getCount() > 0;
+            return loginSuccess;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
     }
 
-    // Method to log the database schema for the 'user' table
+    public boolean insertJobExperience(int userID, String jobTitle, String companyName) {
+        SQLiteDatabase database = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("uID", userID);
+        values.put("name", companyName);
+        values.put("desc", jobTitle);
+        values.put("pic", "");  // Assuming you handle the picture elsewhere or default it
+
+        long result = database.insert("uHistory", null, values);
+        return result != -1;
+    }
+
     public void logDatabaseSchema() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("PRAGMA table_info(user);", null);
-        if (c != null) {
-            while (c.moveToNext()) {
-                Log.d("DB Schema", "Column: " + c.getString(1) + ", Type: " + c.getString(2));
+        Cursor cursor = db.rawQuery("PRAGMA table_info(user);", null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                // Assuming the column names are in the second column
+                Log.d("DB Schema", "Column: " + cursor.getString(1) + ", Type: " + cursor.getString(2));
             }
-            c.close();
+            cursor.close();
         }
+    }
+    public PersonalInfo.UserInfo fetchUserData(int userId) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("user", new String[]{"name", "gender", "phone"}, "id = ?", new String[]{String.valueOf(userId)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(0);
+            String gender = cursor.getString(1);
+            String phone = cursor.getString(2);
+            cursor.close();
+            return new PersonalInfo.UserInfo(name, gender, phone);
+        }
+        if (cursor != null) cursor.close();
+        return null; // Return null if user is not found
     }
 }

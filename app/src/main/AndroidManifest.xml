@@ -47,6 +47,18 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".WelcomeActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".ExperienceActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".PersonalInfo"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

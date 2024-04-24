@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="53dp"
+        android:layout_height="51dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/backbutton" />
+
+    <TextView
+        android:id="@+id/personal_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@id/back_button"
+        android:text="@string/personal_info"
+        android:textSize="38sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/personal_info_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/upicbackground" />
+
+    <!-- Dynamically filled TextViews -->
+    <TextView
+        android:id="@+id/name_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_image"
+        android:layout_marginTop="48dp"
+        android:layout_marginStart="16dp"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/gender_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_info"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/phone_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gender_info"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:textSize="30sp"/>
+</RelativeLayout>
