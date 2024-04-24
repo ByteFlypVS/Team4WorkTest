@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">T4W</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="username">Name</string>
 </resources>

@@ -81,7 +81,7 @@ public class Interests extends RecyclerView.Adapter<Interests.InterestItem>{
 
     private void getInterests(){
         String query = "SELECT * FROM interest";
-        Cursor cursor = gateway.getData(database, query);
+        Cursor cursor = gateway.getData(query);  // Updated to match the Gateway method signature
 
         if(cursor != null && cursor.moveToFirst()){
             do{
