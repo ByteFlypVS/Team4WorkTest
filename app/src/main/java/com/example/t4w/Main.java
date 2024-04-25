@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-public class Main extends AppCompatActivity{
+public class Main extends AppCompatActivity {
 
     int userId; // Variable to store the user ID
     TextToSpeech textToSpeech;
@@ -32,7 +32,7 @@ public class Main extends AppCompatActivity{
     Button search;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -55,9 +55,9 @@ public class Main extends AppCompatActivity{
 
         gateway = new Gateway(this);
         database = gateway.getWritableDatabase();
-        getName();
 
         initializeTextToSpeech();
+        getUserInfo(); // A modified method to fetch name and set the image based on gender
 
         setupListeners();
     }
@@ -81,7 +81,7 @@ public class Main extends AppCompatActivity{
 
         about.setOnClickListener(v -> {
             Intent intPersonalInfo = new Intent(Main.this, PersonalInfo.class);
-            intPersonalInfo.putExtra("USER_ID", userId);  // Pass the user ID to PersonalInfo
+            intPersonalInfo.putExtra("USER_ID", userId);
             startActivity(intPersonalInfo);
         });
 
@@ -115,6 +115,33 @@ public class Main extends AppCompatActivity{
             String desc = text.getText().toString();
             speakText(desc);
         });
+
+        ImageButton appliedTTS = findViewById(R.id.hAppliedTTS);
+        appliedTTS.setOnClickListener(v -> {
+            String message = "Applied";
+            speakText(message);
+        });
+
+        ImageButton logoutTTS = findViewById(R.id.hLogoutTTS);
+        logoutTTS.setOnClickListener(v -> {
+            String message = "Logout";
+            speakText(message);
+        });
+
+        LinearLayout logoutButton = findViewById(R.id.hLogout);
+        logoutButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Main.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish(); // Ensures the current activity is finished and the user can't go back to it.
+        });
+
+        // Setup listener for the Applied button
+        LinearLayout appliedButton = findViewById(R.id.hApplied);
+        appliedButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Main.this, AppliedActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initializeTextToSpeech(){
@@ -136,34 +163,45 @@ public class Main extends AppCompatActivity{
         }
     }
 
-    private void speakText(String text){
-        initializeTextToSpeech();
-        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-    }
-
-    private void getName() {
+    private void getUserInfo() {
         if (userId != -1) { // Check if the userId is valid
-            String query = "SELECT name FROM user WHERE id = " + userId;
+            String query = "SELECT name, gender FROM user WHERE id = " + userId;
             Cursor cursor = gateway.getData(database, query);
 
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
-                    int nameIndex = cursor.getColumnIndex("name"); // Safely check the index
-                    if (nameIndex != -1) { // Ensure the column index is valid
+                    int nameIndex = cursor.getColumnIndex("name");
+                    int genderIndex = cursor.getColumnIndex("gender");
+
+                    if (nameIndex != -1 && genderIndex != -1) { // Check if both columns were found
                         String name = cursor.getString(nameIndex);
+                        String gender = cursor.getString(genderIndex);
                         uName.setText("Hello " + name);
+
+                        // Set the image based on gender
+                        if ("male".equalsIgnoreCase(gender)) {
+                            uPic.setImageResource(R.drawable.male);
+                        } else if ("female".equalsIgnoreCase(gender)) {
+                            uPic.setImageResource(R.drawable.female);
+                        }
                     } else {
-                        uName.setText("Name column not found");
+                        // Handle the case where columns indices were not found
+                        uName.setText("Required columns not found");
                     }
+                    cursor.close();
                 } else {
-                    uName.setText("No data found for user");
+                    uName.setText("User not found");
                 }
-                cursor.close();
             } else {
                 uName.setText("Database query failed");
             }
         } else {
             uName.setText("Invalid User ID");
         }
+    }
+
+    private void speakText(String text){
+        initializeTextToSpeech();
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 }

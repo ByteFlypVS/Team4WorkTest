@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.Locale;
 
 public class PersonalInfo extends AppCompatActivity {
 
     TextView nameInfo, genderInfo, phoneInfo;
+    ImageView profileImage;
     Gateway gateway;
     int userId;  // To hold the received user ID
     private TextToSpeech tts;
@@ -23,6 +25,7 @@ public class PersonalInfo extends AppCompatActivity {
         nameInfo = findViewById(R.id.name_info);
         genderInfo = findViewById(R.id.gender_info);
         phoneInfo = findViewById(R.id.phone_info);
+        profileImage = findViewById(R.id.profile_image);
         ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> finish());
 
@@ -66,11 +69,20 @@ public class PersonalInfo extends AppCompatActivity {
                 nameInfo.setText("Name: " + userInfo.name);
                 genderInfo.setText("Gender: " + userInfo.gender);
                 phoneInfo.setText("Phone Number: " + userInfo.phone);
+                updateProfileImage(userInfo.gender);
             } else {
                 nameInfo.setText("User data not available.");
             }
         } else {
             nameInfo.setText("No user ID provided.");
+        }
+    }
+
+    private void updateProfileImage(String gender) {
+        if (gender.equalsIgnoreCase("male")) {
+            profileImage.setImageResource(R.drawable.male);
+        } else if (gender.equalsIgnoreCase("female")) {
+            profileImage.setImageResource(R.drawable.female);
         }
     }
 

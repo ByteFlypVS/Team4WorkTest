@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageButton
+        android:id="@+id/applied_jobs_back_button"
+        android:layout_width="53dp"
+        android:layout_height="51dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/backbutton" />
+
+    <TextView
+        android:id="@+id/applied_jobs_page_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Applied Jobs"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/applied_jobs_section_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/applied_jobs_page_title"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="33dp"
+        android:text="Job Applications"
+        android:textColor="@color/black"
+        android:textSize="26sp" />
+
+    <View
+        android:id="@+id/applied_jobs_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="@color/red"
+        android:layout_below="@id/applied_jobs_section_title"
+        android:layout_marginTop="4dp"
+        android:layout_alignStart="@id/applied_jobs_section_title"
+        android:layout_alignEnd="@id/applied_jobs_section_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/applied_jobs_underline"
+        android:layout_marginTop="24dp">
+
+        <LinearLayout
+            android:id="@+id/applied_jobs_entries_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Applied job entries will be dynamically added here -->
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
