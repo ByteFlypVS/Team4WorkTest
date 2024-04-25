@@ -35,7 +35,6 @@
         android:scaleType="centerCrop"
         android:src="@drawable/upicbackground" />
 
-    <!-- Dynamically filled TextViews -->
     <TextView
         android:id="@+id/name_info"
         android:layout_width="match_parent"

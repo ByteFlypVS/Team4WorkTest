@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class Main extends AppCompatActivity {
 
-    int userId; // Variable to store the user ID
+    int userId;
     TextToSpeech textToSpeech;
     Gateway gateway;
     SQLiteDatabase database;
@@ -36,8 +36,7 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // Retrieve the user ID from the Intent
-        userId = getIntent().getIntExtra("USER_ID", -1); // Default to -1 if not found
+        userId = getIntent().getIntExtra("USER_ID", -1);
 
         uPic = findViewById(R.id.hPic);
         uName = findViewById(R.id.hName);
@@ -57,7 +56,7 @@ public class Main extends AppCompatActivity {
         database = gateway.getWritableDatabase();
 
         initializeTextToSpeech();
-        getUserInfo(); // A modified method to fetch name and set the image based on gender
+        getUserInfo();
 
         setupListeners();
     }
@@ -133,10 +132,9 @@ public class Main extends AppCompatActivity {
             Intent intent = new Intent(Main.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            finish(); // Ensures the current activity is finished and the user can't go back to it.
+            finish();
         });
 
-        // Setup listener for the Applied button
         LinearLayout appliedButton = findViewById(R.id.hApplied);
         appliedButton.setOnClickListener(v -> {
             Intent intent = new Intent(Main.this, AppliedActivity.class);
@@ -164,7 +162,7 @@ public class Main extends AppCompatActivity {
     }
 
     private void getUserInfo() {
-        if (userId != -1) { // Check if the userId is valid
+        if (userId != -1) {
             String query = "SELECT name, gender FROM user WHERE id = " + userId;
             Cursor cursor = gateway.getData(database, query);
 
@@ -173,19 +171,17 @@ public class Main extends AppCompatActivity {
                     int nameIndex = cursor.getColumnIndex("name");
                     int genderIndex = cursor.getColumnIndex("gender");
 
-                    if (nameIndex != -1 && genderIndex != -1) { // Check if both columns were found
+                    if (nameIndex != -1 && genderIndex != -1) {
                         String name = cursor.getString(nameIndex);
                         String gender = cursor.getString(genderIndex);
                         uName.setText("Hello " + name);
 
-                        // Set the image based on gender
                         if ("male".equalsIgnoreCase(gender)) {
                             uPic.setImageResource(R.drawable.male);
                         } else if ("female".equalsIgnoreCase(gender)) {
                             uPic.setImageResource(R.drawable.female);
                         }
                     } else {
-                        // Handle the case where columns indices were not found
                         uName.setText("Required columns not found");
                     }
                     cursor.close();

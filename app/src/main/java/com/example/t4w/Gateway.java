@@ -38,7 +38,7 @@ public class Gateway extends SQLiteAssetHelper {
             if (cursor != null && cursor.moveToFirst()) {
                 return cursor.getInt(cursor.getColumnIndexOrThrow("id"));
             }
-            return -1; // Return -1 if user is not found
+            return -1;
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -93,7 +93,7 @@ public class Gateway extends SQLiteAssetHelper {
         values.put("uID", userID);
         values.put("name", companyName);
         values.put("desc", jobTitle);
-        values.put("pic", "");  // Assuming you handle the picture elsewhere or default it
+        values.put("pic", "");
 
         long result = database.insert("uHistory", null, values);
         return result != -1;
@@ -104,7 +104,6 @@ public class Gateway extends SQLiteAssetHelper {
         Cursor cursor = db.rawQuery("PRAGMA table_info(user);", null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                // Assuming the column names are in the second column
                 Log.d("DB Schema", "Column: " + cursor.getString(1) + ", Type: " + cursor.getString(2));
             }
             cursor.close();
@@ -121,6 +120,6 @@ public class Gateway extends SQLiteAssetHelper {
             return new PersonalInfo.UserInfo(name, gender, phone);
         }
         if (cursor != null) cursor.close();
-        return null; // Return null if user is not found
+        return null;
     }
 }

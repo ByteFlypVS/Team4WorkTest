@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- App Logo -->
         <ImageView
             android:id="@+id/app_logo"
             android:layout_width="wrap_content"
@@ -28,7 +27,6 @@
             android:layout_marginBottom="16dp"
             android:textSize="34sp"/>
 
-        <!-- User's Name -->
         <EditText
             android:id="@+id/editTextName"
             android:layout_width="match_parent"
@@ -37,7 +35,6 @@
             android:inputType="textPersonName"
             android:layout_marginBottom="16dp"/>
 
-        <!-- User's Phone Number -->
         <EditText
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
@@ -46,7 +43,6 @@
             android:inputType="phone"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Password Input Field -->
         <EditText
             android:id="@+id/password_input"
             android:layout_width="match_parent"
@@ -55,7 +51,6 @@
             android:inputType="textPassword"
             android:layout_marginBottom="16dp"/>
 
-        <!-- User's Gender with TextInputLayout for consistent styling -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutSpinnerGender"
             android:layout_width="match_parent"
@@ -75,7 +70,6 @@
                 android:spinnerMode="dropdown"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Register button -->
         <Button
             android:id="@+id/register_button"
             android:layout_width="match_parent"

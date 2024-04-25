@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements TextToSpeech.OnI
             int userID = dbGateway.getUserID(username);
             if (userID != -1) {
                 Intent intent = new Intent(LoginActivity.this, WelcomeActivity.class);
-                intent.putExtra("USER_ID", userID);  // Pass user ID to WelcomeActivity
+                intent.putExtra("USER_ID", userID);
                 intent.putExtra("USERNAME", username);
                 startActivity(intent);
                 finish();

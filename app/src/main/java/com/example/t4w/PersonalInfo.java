@@ -14,7 +14,7 @@ public class PersonalInfo extends AppCompatActivity {
     TextView nameInfo, genderInfo, phoneInfo;
     ImageView profileImage;
     Gateway gateway;
-    int userId;  // To hold the received user ID
+    int userId;
     private TextToSpeech tts;
 
     @Override
@@ -29,7 +29,7 @@ public class PersonalInfo extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> finish());
 
-        userId = getIntent().getIntExtra("USER_ID", -1); // Default to -1 if not found
+        userId = getIntent().getIntExtra("USER_ID", -1);
         gateway = new Gateway(this);
 
         initializeTextToSpeech();
